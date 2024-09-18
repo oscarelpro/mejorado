@@ -1,0 +1,42 @@
+
+
+.row-cols-md-2>*{
+    flex:0 0 auto;
+    width: 25%;
+}
+
+a{
+    text-decoration: none;
+    color: aliceblue;
+   
+}
+.card-title{
+    margin-top: 20%;
+}
+
+.bi,.bi-cash-coin{
+
+  font-size: 50px;
+  left: 35%;
+  top: 50%;
+  position: absolute;
+}
+.bi,.bi-sort-down{
+
+    font-size: 50px;
+    left: 35%;
+    top: 50%;
+    position: absolute;
+  }
+  .bi,.bi-box-seam{
+    font-size: 50px;
+    left: 35%;
+    top: 50%;
+    position: absolute;
+  }
+  .bi,.bi-car-front-fill{
+    font-size: 50px;
+    left: 35%;
+    top: 50%;
+    position: absolute;
+  }
