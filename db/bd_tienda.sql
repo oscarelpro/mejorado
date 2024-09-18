@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 17-09-2024 a las 05:54:43
--- Versión del servidor: 10.4.28-MariaDB
--- Versión de PHP: 8.0.28
+-- Tiempo de generación: 18-09-2024 a las 18:12:25
+-- Versión del servidor: 10.4.32-MariaDB
+-- Versión de PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -40,7 +40,8 @@ CREATE TABLE `tbl_cliente` (
 --
 
 INSERT INTO `tbl_cliente` (`id_cliente`, `Nombre`, `Apellido`, `cedula`, `telefono`) VALUES
-(1, 'oscar', 'lopez', '25213710', '04242585491');
+(1, 'OSCAR ', 'LOPEZ', '25213710', '04242585491'),
+(2, 'DUBRA', 'AGREDA', '25625917', '04242591410');
 
 -- --------------------------------------------------------
 
@@ -57,15 +58,25 @@ CREATE TABLE `tbl_conteo` (
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `tbl_list_precio`
+--
+
+CREATE TABLE `tbl_list_precio` (
+  `id_producto` int(11) NOT NULL,
+  `precio_costo` float NOT NULL,
+  `precio_venta` float NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `tbl_producto`
 --
 
 CREATE TABLE `tbl_producto` (
   `id_producto` int(11) NOT NULL,
-  `sku` varchar(20) NOT NULL,
+  `sku` varchar(30) NOT NULL,
   `producto` varchar(30) NOT NULL,
-  `precio` decimal(10,0) NOT NULL,
-  `cantidad` int(11) NOT NULL,
   `stock_minimo` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -73,9 +84,10 @@ CREATE TABLE `tbl_producto` (
 -- Volcado de datos para la tabla `tbl_producto`
 --
 
-INSERT INTO `tbl_producto` (`id_producto`, `sku`, `producto`, `precio`, `cantidad`, `stock_minimo`) VALUES
-(1, '0123456', 'lapiz', 12, 20, 10),
-(2, '1234', 'perro', 25, 12, 12);
+INSERT INTO `tbl_producto` (`id_producto`, `sku`, `producto`, `stock_minimo`) VALUES
+(1, '123456', 'termo', 10),
+(3, '123', 'zapato', 10),
+(4, '222222', 'celular', 10);
 
 -- --------------------------------------------------------
 
@@ -95,7 +107,9 @@ CREATE TABLE `tbl_producto_ubicacion` (
 
 INSERT INTO `tbl_producto_ubicacion` (`id_producto`, `id_ubicacion`, `cantidad`) VALUES
 (1, 1, 100),
-(1, 2, 200);
+(1, 2, 200),
+(3, 1, 1),
+(3, 2, 1);
 
 -- --------------------------------------------------------
 
@@ -119,9 +133,16 @@ CREATE TABLE `tbl_repartidor` (
 
 CREATE TABLE `tbl_roll` (
   `id_roll` int(11) NOT NULL,
-  `tipo_user` int(11) NOT NULL,
-  `fk_id_user` int(11) NOT NULL
+  `tipo_user` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `tbl_roll`
+--
+
+INSERT INTO `tbl_roll` (`id_roll`, `tipo_user`) VALUES
+(1, 'ADMINISTRADOR'),
+(2, 'VENDEDOR');
 
 -- --------------------------------------------------------
 
@@ -163,8 +184,8 @@ CREATE TABLE `tbl_ubicacion` (
 --
 
 INSERT INTO `tbl_ubicacion` (`id_ubicacion`, `nombre`) VALUES
-(1, 'tienda'),
-(2, 'almacen');
+(1, 'TIENDA'),
+(2, 'DEPOSITO');
 
 -- --------------------------------------------------------
 
@@ -184,9 +205,8 @@ CREATE TABLE `tbl_user` (
 --
 
 INSERT INTO `tbl_user` (`id_user`, `user`, `tipo_user`, `pass`) VALUES
-(1, 'oscarlopez', 1, '1234'),
-(2, 'juan', 2, '12345'),
-(3, 'pedro', 3, '1234');
+(1, 'OSCAR', 1, '25213710'),
+(2, 'ENRIQUE', 2, '252213710');
 
 -- --------------------------------------------------------
 
@@ -221,6 +241,12 @@ ALTER TABLE `tbl_conteo`
   ADD PRIMARY KEY (`id_conteo`);
 
 --
+-- Indices de la tabla `tbl_list_precio`
+--
+ALTER TABLE `tbl_list_precio`
+  ADD PRIMARY KEY (`id_producto`);
+
+--
 -- Indices de la tabla `tbl_producto`
 --
 ALTER TABLE `tbl_producto`
@@ -230,7 +256,8 @@ ALTER TABLE `tbl_producto`
 -- Indices de la tabla `tbl_producto_ubicacion`
 --
 ALTER TABLE `tbl_producto_ubicacion`
-  ADD PRIMARY KEY (`id_producto`,`id_ubicacion`);
+  ADD PRIMARY KEY (`id_producto`,`id_ubicacion`),
+  ADD KEY `id_ubicacion` (`id_ubicacion`);
 
 --
 -- Indices de la tabla `tbl_repartidor`
@@ -242,8 +269,7 @@ ALTER TABLE `tbl_repartidor`
 -- Indices de la tabla `tbl_roll`
 --
 ALTER TABLE `tbl_roll`
-  ADD PRIMARY KEY (`id_roll`),
-  ADD UNIQUE KEY `fk_id_user` (`fk_id_user`);
+  ADD PRIMARY KEY (`id_roll`);
 
 --
 -- Indices de la tabla `tbl_tipo_venta`
@@ -283,7 +309,7 @@ ALTER TABLE `tbl_venta`
 -- AUTO_INCREMENT de la tabla `tbl_cliente`
 --
 ALTER TABLE `tbl_cliente`
-  MODIFY `id_cliente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_cliente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `tbl_conteo`
@@ -295,7 +321,7 @@ ALTER TABLE `tbl_conteo`
 -- AUTO_INCREMENT de la tabla `tbl_producto`
 --
 ALTER TABLE `tbl_producto`
-  MODIFY `id_producto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_producto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `tbl_repartidor`
@@ -307,7 +333,7 @@ ALTER TABLE `tbl_repartidor`
 -- AUTO_INCREMENT de la tabla `tbl_roll`
 --
 ALTER TABLE `tbl_roll`
-  MODIFY `id_roll` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_roll` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `tbl_tipo_venta`
@@ -331,7 +357,7 @@ ALTER TABLE `tbl_ubicacion`
 -- AUTO_INCREMENT de la tabla `tbl_user`
 --
 ALTER TABLE `tbl_user`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `tbl_venta`
@@ -344,10 +370,23 @@ ALTER TABLE `tbl_venta`
 --
 
 --
+-- Filtros para la tabla `tbl_list_precio`
+--
+ALTER TABLE `tbl_list_precio`
+  ADD CONSTRAINT `tbl_list_precio_ibfk_1` FOREIGN KEY (`id_producto`) REFERENCES `tbl_producto` (`id_producto`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `tbl_producto_ubicacion`
+--
+ALTER TABLE `tbl_producto_ubicacion`
+  ADD CONSTRAINT `tbl_producto_ubicacion_ibfk_1` FOREIGN KEY (`id_producto`) REFERENCES `tbl_producto` (`id_producto`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `tbl_producto_ubicacion_ibfk_2` FOREIGN KEY (`id_ubicacion`) REFERENCES `tbl_ubicacion` (`id_ubicacion`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
 -- Filtros para la tabla `tbl_roll`
 --
 ALTER TABLE `tbl_roll`
-  ADD CONSTRAINT `tbl_roll_ibfk_1` FOREIGN KEY (`fk_id_user`) REFERENCES `tbl_user` (`id_user`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `tbl_roll_ibfk_1` FOREIGN KEY (`id_roll`) REFERENCES `tbl_user` (`id_user`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
